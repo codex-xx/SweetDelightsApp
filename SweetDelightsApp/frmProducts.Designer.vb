@@ -36,52 +36,58 @@ Partial Class frmProducts
         'dgvCakes
         '
         Me.dgvCakes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvCakes.Location = New System.Drawing.Point(308, 31)
+        Me.dgvCakes.Location = New System.Drawing.Point(256, 32)
         Me.dgvCakes.Name = "dgvCakes"
-        Me.dgvCakes.Size = New System.Drawing.Size(347, 116)
+        Me.dgvCakes.Size = New System.Drawing.Size(407, 128)
         Me.dgvCakes.TabIndex = 0
         '
         'dgvIcing
         '
         Me.dgvIcing.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvIcing.Location = New System.Drawing.Point(308, 153)
+        Me.dgvIcing.Location = New System.Drawing.Point(256, 166)
         Me.dgvIcing.Name = "dgvIcing"
-        Me.dgvIcing.Size = New System.Drawing.Size(347, 116)
+        Me.dgvIcing.Size = New System.Drawing.Size(407, 126)
         Me.dgvIcing.TabIndex = 1
         '
         'dgvTopping
         '
         Me.dgvTopping.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvTopping.Location = New System.Drawing.Point(308, 275)
+        Me.dgvTopping.Location = New System.Drawing.Point(256, 298)
         Me.dgvTopping.Name = "dgvTopping"
-        Me.dgvTopping.Size = New System.Drawing.Size(347, 116)
+        Me.dgvTopping.Size = New System.Drawing.Size(407, 129)
         Me.dgvTopping.TabIndex = 2
         '
         'TextBox1
         '
-        Me.TextBox1.Location = New System.Drawing.Point(110, 91)
+        Me.TextBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TextBox1.Location = New System.Drawing.Point(58, 68)
+        Me.TextBox1.Multiline = True
         Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(100, 20)
+        Me.TextBox1.Size = New System.Drawing.Size(112, 81)
         Me.TextBox1.TabIndex = 3
-        Me.TextBox1.Text = "CAKES"
+        Me.TextBox1.Text = "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "CAKES"
         Me.TextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'dgvIcings
         '
-        Me.dgvIcings.Location = New System.Drawing.Point(110, 209)
+        Me.dgvIcings.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.dgvIcings.Location = New System.Drawing.Point(58, 189)
+        Me.dgvIcings.Multiline = True
         Me.dgvIcings.Name = "dgvIcings"
-        Me.dgvIcings.Size = New System.Drawing.Size(100, 20)
+        Me.dgvIcings.Size = New System.Drawing.Size(112, 77)
         Me.dgvIcings.TabIndex = 4
-        Me.dgvIcings.Text = "ICING"
+        Me.dgvIcings.Text = "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ICING"
         Me.dgvIcings.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'dgvToppings
         '
-        Me.dgvToppings.Location = New System.Drawing.Point(110, 319)
+        Me.dgvToppings.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.dgvToppings.Location = New System.Drawing.Point(58, 320)
+        Me.dgvToppings.Multiline = True
         Me.dgvToppings.Name = "dgvToppings"
-        Me.dgvToppings.Size = New System.Drawing.Size(100, 20)
+        Me.dgvToppings.Size = New System.Drawing.Size(112, 82)
         Me.dgvToppings.TabIndex = 5
-        Me.dgvToppings.Text = "TOPPINGS"
+        Me.dgvToppings.Text = "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "TOPPINGS"
         Me.dgvToppings.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'frmProducts
@@ -97,7 +103,7 @@ Partial Class frmProducts
         Me.Controls.Add(Me.dgvIcing)
         Me.Controls.Add(Me.dgvCakes)
         Me.Name = "frmProducts"
-        Me.Text = "frmProducts"
+        Me.Text = "Products"
         CType(Me.dgvCakes, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.dgvIcing, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.dgvTopping, System.ComponentModel.ISupportInitialize).EndInit()

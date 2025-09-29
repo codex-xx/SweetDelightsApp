@@ -67,7 +67,7 @@ Partial Class frmMain
         Me.Controls.Add(Me.btnOrders)
         Me.Controls.Add(Me.btnCustomers)
         Me.Name = "frmMain"
-        Me.Text = "Form1"
+        Me.Text = "Main"
         Me.ResumeLayout(False)
 
     End Sub

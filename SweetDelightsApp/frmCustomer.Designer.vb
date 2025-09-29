@@ -48,54 +48,54 @@ Partial Class frmCustomer
         '
         Me.txtFirstName.Location = New System.Drawing.Point(22, 85)
         Me.txtFirstName.Name = "txtFirstName"
-        Me.txtFirstName.Size = New System.Drawing.Size(297, 20)
+        Me.txtFirstName.Size = New System.Drawing.Size(126, 20)
         Me.txtFirstName.TabIndex = 0
         '
         'txtLastName
         '
         Me.txtLastName.Location = New System.Drawing.Point(22, 124)
         Me.txtLastName.Name = "txtLastName"
-        Me.txtLastName.Size = New System.Drawing.Size(297, 20)
+        Me.txtLastName.Size = New System.Drawing.Size(126, 20)
         Me.txtLastName.TabIndex = 1
         '
         'txtContactNumber
         '
         Me.txtContactNumber.Location = New System.Drawing.Point(22, 163)
         Me.txtContactNumber.Name = "txtContactNumber"
-        Me.txtContactNumber.Size = New System.Drawing.Size(297, 20)
+        Me.txtContactNumber.Size = New System.Drawing.Size(126, 20)
         Me.txtContactNumber.TabIndex = 2
         '
         'txtEmail
         '
         Me.txtEmail.Location = New System.Drawing.Point(22, 202)
         Me.txtEmail.Name = "txtEmail"
-        Me.txtEmail.Size = New System.Drawing.Size(297, 20)
+        Me.txtEmail.Size = New System.Drawing.Size(126, 20)
         Me.txtEmail.TabIndex = 3
         '
         'txtStreetAddress
         '
         Me.txtStreetAddress.Location = New System.Drawing.Point(22, 241)
         Me.txtStreetAddress.Name = "txtStreetAddress"
-        Me.txtStreetAddress.Size = New System.Drawing.Size(297, 20)
+        Me.txtStreetAddress.Size = New System.Drawing.Size(126, 20)
         Me.txtStreetAddress.TabIndex = 4
         '
         'txtBarangay
         '
         Me.txtBarangay.Location = New System.Drawing.Point(21, 280)
         Me.txtBarangay.Name = "txtBarangay"
-        Me.txtBarangay.Size = New System.Drawing.Size(297, 20)
+        Me.txtBarangay.Size = New System.Drawing.Size(127, 20)
         Me.txtBarangay.TabIndex = 5
         '
         'txtCity
         '
         Me.txtCity.Location = New System.Drawing.Point(22, 319)
         Me.txtCity.Name = "txtCity"
-        Me.txtCity.Size = New System.Drawing.Size(297, 20)
+        Me.txtCity.Size = New System.Drawing.Size(126, 20)
         Me.txtCity.TabIndex = 6
         '
         'btnSave
         '
-        Me.btnSave.Location = New System.Drawing.Point(367, 319)
+        Me.btnSave.Location = New System.Drawing.Point(154, 345)
         Me.btnSave.Name = "btnSave"
         Me.btnSave.Size = New System.Drawing.Size(82, 75)
         Me.btnSave.TabIndex = 7
@@ -104,7 +104,7 @@ Partial Class frmCustomer
         '
         'btnUpdate
         '
-        Me.btnUpdate.Location = New System.Drawing.Point(472, 319)
+        Me.btnUpdate.Location = New System.Drawing.Point(252, 345)
         Me.btnUpdate.Name = "btnUpdate"
         Me.btnUpdate.Size = New System.Drawing.Size(82, 75)
         Me.btnUpdate.TabIndex = 8
@@ -113,7 +113,7 @@ Partial Class frmCustomer
         '
         'btnDelete
         '
-        Me.btnDelete.Location = New System.Drawing.Point(576, 319)
+        Me.btnDelete.Location = New System.Drawing.Point(353, 345)
         Me.btnDelete.Name = "btnDelete"
         Me.btnDelete.Size = New System.Drawing.Size(82, 75)
         Me.btnDelete.TabIndex = 9
@@ -122,7 +122,7 @@ Partial Class frmCustomer
         '
         'btnClear
         '
-        Me.btnClear.Location = New System.Drawing.Point(682, 319)
+        Me.btnClear.Location = New System.Drawing.Point(455, 345)
         Me.btnClear.Name = "btnClear"
         Me.btnClear.Size = New System.Drawing.Size(82, 75)
         Me.btnClear.TabIndex = 10
@@ -132,9 +132,9 @@ Partial Class frmCustomer
         'dgvCustomers
         '
         Me.dgvCustomers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvCustomers.Location = New System.Drawing.Point(367, 85)
+        Me.dgvCustomers.Location = New System.Drawing.Point(154, 85)
         Me.dgvCustomers.Name = "dgvCustomers"
-        Me.dgvCustomers.Size = New System.Drawing.Size(397, 210)
+        Me.dgvCustomers.Size = New System.Drawing.Size(803, 254)
         Me.dgvCustomers.TabIndex = 11
         '
         'Label1
@@ -205,7 +205,7 @@ Partial Class frmCustomer
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.GradientInactiveCaption
-        Me.ClientSize = New System.Drawing.Size(800, 450)
+        Me.ClientSize = New System.Drawing.Size(969, 450)
         Me.Controls.Add(Me.Label7)
         Me.Controls.Add(Me.Label6)
         Me.Controls.Add(Me.Label5)
@@ -226,7 +226,7 @@ Partial Class frmCustomer
         Me.Controls.Add(Me.txtLastName)
         Me.Controls.Add(Me.txtFirstName)
         Me.Name = "frmCustomer"
-        Me.Text = "frmCustomer"
+        Me.Text = "Customer"
         CType(Me.dgvCustomers, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()

@@ -198,7 +198,7 @@ Partial Class frmOrder
         Me.Controls.Add(Me.cmbCake)
         Me.Controls.Add(Me.cmbCustomer)
         Me.Name = "frmOrder"
-        Me.Text = "frmOrder"
+        Me.Text = "Order"
         CType(Me.numQuantity, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.dgvOrderDetails, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)

@@ -144,7 +144,7 @@ Public Class frmOrder
                         Dim cakeID As Integer = CInt(row.Cells("CakeID").Value)
                         Dim icingID As Integer = CInt(row.Cells("IcingID").Value)
                         Dim sqlCheckIcing As String = "IF NOT EXISTS (SELECT 1 FROM CakeIcing WHERE CakeID=@CakeID AND IcingID=@IcingID) " &
-                                                     "INSERT INTO CakeIcing (CakeID, IcingID) VALUES (@CakeID, @IcingID)"
+                                                 "INSERT INTO CakeIcing (CakeID, IcingID) VALUES (@CakeID, @IcingID)"
                         Using cmdCheckIcing As New SqlCommand(sqlCheckIcing, con, trans)
                             cmdCheckIcing.Parameters.AddWithValue("@CakeID", cakeID)
                             cmdCheckIcing.Parameters.AddWithValue("@IcingID", icingID)
@@ -154,7 +154,7 @@ Public Class frmOrder
                         ' Link Cake with Topping in CakeTopping table (if not exists)
                         Dim toppingID As Integer = CInt(row.Cells("ToppingID").Value)
                         Dim sqlCheckTopping As String = "IF NOT EXISTS (SELECT 1 FROM CakeTopping WHERE CakeID=@CakeID AND ToppingID=@ToppingID) " &
-                                                      "INSERT INTO CakeTopping (CakeID, ToppingID) VALUES (@CakeID, @ToppingID)"
+                                                  "INSERT INTO CakeTopping (CakeID, ToppingID) VALUES (@CakeID, @ToppingID)"
                         Using cmdCheckTopping As New SqlCommand(sqlCheckTopping, con, trans)
                             cmdCheckTopping.Parameters.AddWithValue("@CakeID", cakeID)
                             cmdCheckTopping.Parameters.AddWithValue("@ToppingID", toppingID)
@@ -163,8 +163,45 @@ Public Class frmOrder
                     End If
                 Next
 
+                ' Commit transaction
                 trans.Commit()
+
+                ' Show success message
                 MessageBox.Show("Order placed successfully!")
+
+                ' === Build and Show Receipt ===
+                Dim receiptBuilder As New Text.StringBuilder()
+                receiptBuilder.AppendLine("======= Sweet Delights =======")
+                receiptBuilder.AppendLine("Date: " & DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
+                receiptBuilder.AppendLine("Customer: " & cmbCustomer.Text)
+                receiptBuilder.AppendLine("-------------------------------")
+
+                For Each row As DataGridViewRow In dgvOrderDetails.Rows
+                    If Not row.IsNewRow Then
+                        Dim cake As String = row.Cells("Cake").Value.ToString()
+                        Dim icing As String = row.Cells("Icing").Value.ToString()
+                        Dim topping As String = row.Cells("Topping").Value.ToString()
+                        Dim qty As Integer = Convert.ToInt32(row.Cells("Quantity").Value)
+                        Dim priceEach As Decimal = Convert.ToDecimal(row.Cells("PriceEach").Value)
+                        Dim subtotal As Decimal = Convert.ToDecimal(row.Cells("Subtotal").Value)
+
+                        receiptBuilder.AppendLine($"{cake} + {icing} + {topping}")
+                        receiptBuilder.AppendLine($"Qty: {qty}  x  {priceEach:C2}  =  {subtotal:C2}")
+                        receiptBuilder.AppendLine("")
+                    End If
+                Next
+
+                receiptBuilder.AppendLine("-------------------------------")
+                receiptBuilder.AppendLine("Total: " & lblTotal.Text)
+                receiptBuilder.AppendLine("Thank you for your order!")
+                receiptBuilder.AppendLine("===============================")
+
+                ' Show receipt in modal form
+                Dim receiptForm As New frmReceipt()
+                receiptForm.LoadReceipt(receiptBuilder.ToString())
+                receiptForm.ShowDialog()
+
+                ' Clear order data
                 dgvOrderDetails.Rows.Clear()
                 lblTotal.Text = "0.00"
 
@@ -174,6 +211,7 @@ Public Class frmOrder
             End Try
         End Using
     End Sub
+
 
     ' Connection helper
     Private Function GetConnection() As SqlConnection
