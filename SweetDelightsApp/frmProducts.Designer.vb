@@ -36,17 +36,19 @@ Partial Class frmProducts
         'dgvCakes
         '
         Me.dgvCakes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvCakes.Location = New System.Drawing.Point(256, 32)
+        Me.dgvCakes.Location = New System.Drawing.Point(256, 10)
         Me.dgvCakes.Name = "dgvCakes"
-        Me.dgvCakes.Size = New System.Drawing.Size(407, 128)
+        Me.dgvCakes.ScrollBars = System.Windows.Forms.ScrollBars.None
+        Me.dgvCakes.Size = New System.Drawing.Size(377, 139)
         Me.dgvCakes.TabIndex = 0
         '
         'dgvIcing
         '
         Me.dgvIcing.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvIcing.Location = New System.Drawing.Point(256, 166)
+        Me.dgvIcing.Location = New System.Drawing.Point(256, 155)
         Me.dgvIcing.Name = "dgvIcing"
-        Me.dgvIcing.Size = New System.Drawing.Size(407, 126)
+        Me.dgvIcing.ScrollBars = System.Windows.Forms.ScrollBars.None
+        Me.dgvIcing.Size = New System.Drawing.Size(377, 137)
         Me.dgvIcing.TabIndex = 1
         '
         'dgvTopping
@@ -54,7 +56,8 @@ Partial Class frmProducts
         Me.dgvTopping.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgvTopping.Location = New System.Drawing.Point(256, 298)
         Me.dgvTopping.Name = "dgvTopping"
-        Me.dgvTopping.Size = New System.Drawing.Size(407, 129)
+        Me.dgvTopping.ScrollBars = System.Windows.Forms.ScrollBars.None
+        Me.dgvTopping.Size = New System.Drawing.Size(377, 140)
         Me.dgvTopping.TabIndex = 2
         '
         'TextBox1

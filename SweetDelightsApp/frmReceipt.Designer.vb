@@ -35,14 +35,14 @@ Partial Class frmReceipt
         Me.txtReceipt.Name = "txtReceipt"
         Me.txtReceipt.ReadOnly = True
         Me.txtReceipt.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtReceipt.Size = New System.Drawing.Size(800, 350)
+        Me.txtReceipt.Size = New System.Drawing.Size(352, 278)
         Me.txtReceipt.TabIndex = 0
         '
         'btnClose
         '
-        Me.btnClose.Location = New System.Drawing.Point(352, 356)
+        Me.btnClose.Location = New System.Drawing.Point(134, 284)
         Me.btnClose.Name = "btnClose"
-        Me.btnClose.Size = New System.Drawing.Size(70, 62)
+        Me.btnClose.Size = New System.Drawing.Size(70, 25)
         Me.btnClose.TabIndex = 1
         Me.btnClose.Text = "Close"
         Me.btnClose.UseVisualStyleBackColor = True
@@ -51,7 +51,7 @@ Partial Class frmReceipt
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(800, 450)
+        Me.ClientSize = New System.Drawing.Size(352, 321)
         Me.Controls.Add(Me.btnClose)
         Me.Controls.Add(Me.txtReceipt)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog

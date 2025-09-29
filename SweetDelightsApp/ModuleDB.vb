@@ -3,7 +3,7 @@
 Module ModuleDB
     ' Change the Data Source to match your SQL Server instance
     Public connectionString As String =
-    "Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=SweetDelightsDB;Integrated Security=True"
+    "Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=SweetDelight;Integrated Security=True"
 
 
     Public Function GetConnection() As SqlConnection

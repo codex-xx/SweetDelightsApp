@@ -1,13 +1,15 @@
 ﻿Imports System.Data.SqlClient
 
 Public Class frmOrder
+
     Private Sub frmOrder_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LoadCustomers()
         LoadCakes()
-        LoadIcings()
-        LoadToppings()
 
-        ' Set up DataGridView columns with hidden ID columns for referencing
+        ' Set up event handler AFTER cakes are loaded
+        AddHandler cmbCake.SelectedIndexChanged, AddressOf cmbCake_SelectedIndexChanged
+
+        ' Set up DataGridView columns
         dgvOrderDetails.Columns.Clear()
         dgvOrderDetails.Columns.Add("CakeID", "CakeID")
         dgvOrderDetails.Columns("CakeID").Visible = False
@@ -45,29 +47,64 @@ Public Class frmOrder
         End Using
     End Sub
 
-    Private Sub LoadIcings()
+    ' Load Icings related to selected Cake
+    Private Sub LoadIcings(cakeID As Integer)
         Using con As SqlConnection = GetConnection()
-            Dim da As New SqlDataAdapter("SELECT IcingID, IcingType, Price FROM Icing", con)
+            Dim query As String = "SELECT i.IcingID, i.IcingType, i.Price " &
+                                  "FROM Icing i " &
+                                  "INNER JOIN CakeIcing ci ON i.IcingID = ci.IcingID " &
+                                  "WHERE ci.CakeID = @CakeID"
+            Dim da As New SqlDataAdapter(query, con)
+            da.SelectCommand.Parameters.AddWithValue("@CakeID", cakeID)
             Dim dt As New DataTable()
             da.Fill(dt)
+
+            cmbIcing.DataSource = Nothing
+            cmbIcing.Items.Clear()
+
             cmbIcing.DataSource = dt
             cmbIcing.DisplayMember = "IcingType"
             cmbIcing.ValueMember = "IcingID"
         End Using
     End Sub
 
-    Private Sub LoadToppings()
+    ' Load Toppings related to selected Cake
+    Private Sub LoadToppings(cakeID As Integer)
         Using con As SqlConnection = GetConnection()
-            Dim da As New SqlDataAdapter("SELECT ToppingID, ToppingType, Price FROM Topping", con)
+            Dim query As String = "SELECT t.ToppingID, t.ToppingType, t.Price " &
+                                  "FROM Topping t " &
+                                  "INNER JOIN CakeTopping ct ON t.ToppingID = ct.ToppingID " &
+                                  "WHERE ct.CakeID = @CakeID"
+            Dim da As New SqlDataAdapter(query, con)
+            da.SelectCommand.Parameters.AddWithValue("@CakeID", cakeID)
             Dim dt As New DataTable()
             da.Fill(dt)
+
+            cmbTopping.DataSource = Nothing
+            cmbTopping.Items.Clear()
+
             cmbTopping.DataSource = dt
             cmbTopping.DisplayMember = "ToppingType"
             cmbTopping.ValueMember = "ToppingID"
         End Using
     End Sub
 
+    ' Update icings and toppings when cake changes
+    Private Sub cmbCake_SelectedIndexChanged(sender As Object, e As EventArgs)
+        If cmbCake.SelectedValue Is Nothing Then Exit Sub
+        Dim selectedCakeID As Integer
+        If Integer.TryParse(cmbCake.SelectedValue.ToString(), selectedCakeID) Then
+            LoadIcings(selectedCakeID)
+            LoadToppings(selectedCakeID)
+        End If
+    End Sub
+
     Private Sub btnAddItem_Click(sender As Object, e As EventArgs) Handles btnAddItem.Click
+        If cmbIcing.SelectedItem Is Nothing OrElse cmbTopping.SelectedItem Is Nothing Then
+            MessageBox.Show("Please select a valid icing and topping.")
+            Return
+        End If
+
         Dim cakeID As Integer = CInt(cmbCake.SelectedValue)
         Dim cakeName As String = cmbCake.Text
         Dim cakePrice As Decimal = Convert.ToDecimal(DirectCast(cmbCake.SelectedItem, DataRowView)("Price"))
@@ -81,7 +118,6 @@ Public Class frmOrder
         Dim toppingPrice As Decimal = Convert.ToDecimal(DirectCast(cmbTopping.SelectedItem, DataRowView)("Price"))
 
         Dim quantity As Integer = CInt(numQuantity.Value)
-
         Dim priceEach As Decimal = cakePrice + icingPrice + toppingPrice
         Dim subtotal As Decimal = priceEach * quantity
 
@@ -108,7 +144,7 @@ Public Class frmOrder
     End Sub
 
     Private Sub btnPlaceOrder_Click(sender As Object, e As EventArgs) Handles btnPlaceOrder.Click
-        If dgvOrderDetails.Rows.Count = 0 OrElse dgvOrderDetails.Rows.Count = 1 AndAlso dgvOrderDetails.Rows(0).IsNewRow Then
+        If dgvOrderDetails.Rows.Count = 0 OrElse (dgvOrderDetails.Rows.Count = 1 AndAlso dgvOrderDetails.Rows(0).IsNewRow) Then
             MessageBox.Show("No items to place.")
             Return
         End If
@@ -118,7 +154,7 @@ Public Class frmOrder
             Dim trans As SqlTransaction = con.BeginTransaction()
 
             Try
-                ' Insert order and get OrderID
+                ' Insert order
                 Dim insertOrderSql As String = "INSERT INTO Orders (CustomerID, OrderDate, TotalAmount) OUTPUT INSERTED.OrderID VALUES (@CustomerID, @OrderDate, @TotalAmount)"
                 Dim orderId As Integer
                 Using cmd As New SqlCommand(insertOrderSql, con, trans)
@@ -128,33 +164,32 @@ Public Class frmOrder
                     orderId = Convert.ToInt32(cmd.ExecuteScalar())
                 End Using
 
-                ' Insert each order detail
+                ' Insert order details
                 Dim insertDetailsSql As String = "INSERT INTO OrderDetails (OrderID, CakeID, Quantity, Subtotal) VALUES (@OrderID, @CakeID, @Quantity, @Subtotal)"
                 For Each row As DataGridViewRow In dgvOrderDetails.Rows
                     If Not row.IsNewRow Then
+                        Dim cakeID As Integer = CInt(row.Cells("CakeID").Value)
+                        Dim icingID As Integer = CInt(row.Cells("IcingID").Value)
+                        Dim toppingID As Integer = CInt(row.Cells("ToppingID").Value)
+
                         Using cmdDet As New SqlCommand(insertDetailsSql, con, trans)
                             cmdDet.Parameters.AddWithValue("@OrderID", orderId)
-                            cmdDet.Parameters.AddWithValue("@CakeID", CInt(row.Cells("CakeID").Value))
+                            cmdDet.Parameters.AddWithValue("@CakeID", cakeID)
                             cmdDet.Parameters.AddWithValue("@Quantity", CInt(row.Cells("Quantity").Value))
                             cmdDet.Parameters.AddWithValue("@Subtotal", Convert.ToDecimal(row.Cells("Subtotal").Value))
                             cmdDet.ExecuteNonQuery()
                         End Using
 
-                        ' Link Cake with Icing in CakeIcing table (if not exists)
-                        Dim cakeID As Integer = CInt(row.Cells("CakeID").Value)
-                        Dim icingID As Integer = CInt(row.Cells("IcingID").Value)
-                        Dim sqlCheckIcing As String = "IF NOT EXISTS (SELECT 1 FROM CakeIcing WHERE CakeID=@CakeID AND IcingID=@IcingID) " &
-                                                 "INSERT INTO CakeIcing (CakeID, IcingID) VALUES (@CakeID, @IcingID)"
+                        ' Link cake and icing
+                        Dim sqlCheckIcing As String = "IF NOT EXISTS (SELECT 1 FROM CakeIcing WHERE CakeID=@CakeID AND IcingID=@IcingID) INSERT INTO CakeIcing (CakeID, IcingID) VALUES (@CakeID, @IcingID)"
                         Using cmdCheckIcing As New SqlCommand(sqlCheckIcing, con, trans)
                             cmdCheckIcing.Parameters.AddWithValue("@CakeID", cakeID)
                             cmdCheckIcing.Parameters.AddWithValue("@IcingID", icingID)
                             cmdCheckIcing.ExecuteNonQuery()
                         End Using
 
-                        ' Link Cake with Topping in CakeTopping table (if not exists)
-                        Dim toppingID As Integer = CInt(row.Cells("ToppingID").Value)
-                        Dim sqlCheckTopping As String = "IF NOT EXISTS (SELECT 1 FROM CakeTopping WHERE CakeID=@CakeID AND ToppingID=@ToppingID) " &
-                                                  "INSERT INTO CakeTopping (CakeID, ToppingID) VALUES (@CakeID, @ToppingID)"
+                        ' Link cake and topping
+                        Dim sqlCheckTopping As String = "IF NOT EXISTS (SELECT 1 FROM CakeTopping WHERE CakeID=@CakeID AND ToppingID=@ToppingID) INSERT INTO CakeTopping (CakeID, ToppingID) VALUES (@CakeID, @ToppingID)"
                         Using cmdCheckTopping As New SqlCommand(sqlCheckTopping, con, trans)
                             cmdCheckTopping.Parameters.AddWithValue("@CakeID", cakeID)
                             cmdCheckTopping.Parameters.AddWithValue("@ToppingID", toppingID)
@@ -163,13 +198,10 @@ Public Class frmOrder
                     End If
                 Next
 
-                ' Commit transaction
                 trans.Commit()
-
-                ' Show success message
                 MessageBox.Show("Order placed successfully!")
 
-                ' === Build and Show Receipt ===
+                ' Show receipt
                 Dim receiptBuilder As New Text.StringBuilder()
                 receiptBuilder.AppendLine("======= Sweet Delights =======")
                 receiptBuilder.AppendLine("Date: " & DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
@@ -178,16 +210,9 @@ Public Class frmOrder
 
                 For Each row As DataGridViewRow In dgvOrderDetails.Rows
                     If Not row.IsNewRow Then
-                        Dim cake As String = row.Cells("Cake").Value.ToString()
-                        Dim icing As String = row.Cells("Icing").Value.ToString()
-                        Dim topping As String = row.Cells("Topping").Value.ToString()
-                        Dim qty As Integer = Convert.ToInt32(row.Cells("Quantity").Value)
-                        Dim priceEach As Decimal = Convert.ToDecimal(row.Cells("PriceEach").Value)
-                        Dim subtotal As Decimal = Convert.ToDecimal(row.Cells("Subtotal").Value)
-
-                        receiptBuilder.AppendLine($"{cake} + {icing} + {topping}")
-                        receiptBuilder.AppendLine($"Qty: {qty}  x  {priceEach:C2}  =  {subtotal:C2}")
-                        receiptBuilder.AppendLine("")
+                        receiptBuilder.AppendLine($"{row.Cells("Cake").Value} + {row.Cells("Icing").Value} + {row.Cells("Topping").Value}")
+                        receiptBuilder.AppendLine($"Qty: {row.Cells("Quantity").Value} x {Convert.ToDecimal(row.Cells("PriceEach").Value):C2} = {Convert.ToDecimal(row.Cells("Subtotal").Value):C2}")
+                        receiptBuilder.AppendLine()
                     End If
                 Next
 
@@ -196,12 +221,12 @@ Public Class frmOrder
                 receiptBuilder.AppendLine("Thank you for your order!")
                 receiptBuilder.AppendLine("===============================")
 
-                ' Show receipt in modal form
+                ' Show receipt form
                 Dim receiptForm As New frmReceipt()
                 receiptForm.LoadReceipt(receiptBuilder.ToString())
                 receiptForm.ShowDialog()
 
-                ' Clear order data
+                ' Reset form
                 dgvOrderDetails.Rows.Clear()
                 lblTotal.Text = "0.00"
 
@@ -212,10 +237,9 @@ Public Class frmOrder
         End Using
     End Sub
 
-
-    ' Connection helper
+    ' DB connection
     Private Function GetConnection() As SqlConnection
-        Dim connString As String = "Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=SweetDelightsDB;Integrated Security=True"
+        Dim connString As String = "Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=SweetDelight;Integrated Security=True"
         Return New SqlConnection(connString)
     End Function
 End Class
